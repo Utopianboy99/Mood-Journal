@@ -3,6 +3,13 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import moodsRouter from './routes/moods.js';
+import cors from "cors";
+
+// Allow requests from your local frontend
+app.use(cors({
+  origin: "http://127.0.0.1:5500"  // Or use "*" for all origins during development
+}));
+
 
 dotenv.config();
 

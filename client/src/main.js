@@ -1,24 +1,42 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
+const API_BASE_URL = 'https://mood-journal-1c99.onrender.com';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const form = document.getElementById("moodForm");
+const moodList = document.getElementById("moodList");
 
-setupCounter(document.querySelector('#counter'))
+// Handle mood form submission
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const mood = document.getElementById("mood").value;
+  const description = document.getElementById("description").value;
+
+  const response = await fetch(`${API_BASE_URL}/moods`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mood, description })
+  });
+
+  if (response.ok) {
+    form.reset();
+    loadMoods();
+  } else {
+    alert("Error logging mood");
+  }
+});
+
+// Fetch moods from backend and display them
+async function loadMoods() {
+  const res = await fetch(`${API_BASE_URL}/moods`);
+  const moods = await res.json();
+
+  moodList.innerHTML = "";
+
+  moods.forEach(({ mood, description, createdAt }) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${mood}</strong><br>${description}<br><small>${new Date(createdAt).toLocaleString()}</small>`;
+    moodList.appendChild(li);
+  });
+}
+
+// Load existing moods on page load
+loadMoods();
