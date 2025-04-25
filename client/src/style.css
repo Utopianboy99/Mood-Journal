@@ -49,6 +49,7 @@ form button {
 #moodList {
   list-style: none;
   padding: 0;
+  color:black;
 }
 
 #moodList li {
