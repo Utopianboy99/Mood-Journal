@@ -24,13 +24,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// Fetch moods from backend and display them
 
-const response = await fetch(`${API_BASE_URL}/moods`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ mood, description })
-});
 
 async function loadMoods() {
   const res = await fetch(`${API_BASE_URL}/moods`);
